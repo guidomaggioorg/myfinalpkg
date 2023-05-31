@@ -1,0 +1,26 @@
+Package: myfinalpkg
+Title: IntroR4 example pkg
+Version: 1.0.0
+Author: Guido Maggio
+Maintainer: Guido Maggio <guido.maggio@mirai-solutions.com>
+Description: Example package for IntroR4 workshop.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: 
+    R (>= 4.2.0),
+Imports: 
+    dplyr,
+    ggplot2,
+    scales,
+    utils,
+    zoo
+Suggests: 
+    rmarkdown,
+    knitr,
+    testthat (>= 3.0.0),
+    tidyr,
+    lubridate
+Config/testthat/edition: 3

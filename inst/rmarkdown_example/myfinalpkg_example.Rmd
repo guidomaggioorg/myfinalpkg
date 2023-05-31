@@ -1,0 +1,87 @@
+---
+title: "IntroR4 example"
+author: "Guido Maggio"
+date: \today
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, prompt = TRUE, tidy =  FALSE, collapse = FALSE, comment = '', warning = FALSE, message = FALSE,
+                      tidy.opts = list(width.cutoff = 60), fig.align="center")
+library(myfinalpkg)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(zoo)
+library(utils)
+```
+
+## `R` Markdown
+
+This is an `R` Markdown document. Markdown is a simple formatting syntax for authoring `HTML`, `PDF`, and MS Word documents. For more details on using `R` Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded `R` code chunks within the document.
+
+
+## Processing covid 19 data
+
+In this section we read covid19 data from the package and we process them computing additional variables (actives and daily values) and rolled means.
+
+Note that the `echo = TRUE` parameter was added to the code chunk to allow printing of the `R` code that generated the plot.
+
+```{r data, echo=TRUE}
+df <- read_data(filename = "case_time_series.csv",
+               path = "covid_data")
+data <- process_data(df)
+last_n_days_rep(data, 7)
+```
+2 modules have been used: 
+
+- `read_data` to read from csv file in a given folder
+- `process_data` to compute some missing variables like daily values and Actives
+
+These 2 modules could be used also with a different data-set that has however the same structure.
+
+## Graphics
+
+Let's analyse how the infections developed in the last 2 months:
+
+```{r graph1, echo=TRUE, out.height = "50%", warning = FALSE}
+bar_plot_data(data, value = "Daily.Confirmed", startdate = "2021-09-01", title = "Last 2 months Confirmed cases", rollm = TRUE)
+```
+
+Let's analyse how the active cases have developed in the last month:
+
+```{r graph2, echo=TRUE, out.height = "50%", warning = FALSE}
+line_plot_data(data, value = "Daily.Active", title = "Evolution Active cases")
+```
+
+2 graphic modules have been used: `line_plot_data` `bar_plot_data` which share smaller modules.
+
+## Re-use module
+
+`*_plot_data` functions would work with any data-set that has a "Date" column. 
+
+For example this "Lakers" data-set from `lubridate` package contains a time series of scores from the Lakers`players.
+
+```{r lakers, echo=FALSE, out.height = "50%", warning = FALSE}
+library(lubridate)
+library(tidyr) # required for pivot_wider
+
+lakers_dt <- lakers %>% 
+    filter(result == "made", team == "LAL") %>%
+    mutate(Date = ymd(date)) %>% 
+    mutate(player = gsub(" ", "_", player)) %>%
+    select(-date,-time) %>% 
+    group_by(Date,player) %>%
+    summarize(points = sum(points)) %>%
+    arrange(Date,player) %>%
+    pivot_wider(names_from = "player", values_from = "points")
+```
+
+```{r lakers 2, echo=TRUE, out.height = "50%", warning = FALSE}
+tail(lakers_dt)
+bar_plot_data(lakers_dt, value = "Kobe_Bryant", title = "Lakers player points", rollm = FALSE)
+```
+
