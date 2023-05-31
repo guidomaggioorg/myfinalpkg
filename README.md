@@ -32,3 +32,11 @@ data <- process_data(df)
 last_n_days_rep(data)
 #bar_plot_data(data, "Daily.Deceased", title = "Daily Deaths", rollm = TRUE)
 ```
+
+### Installation
+
+```r
+require(devtools)
+install_github("yourgithubrepo/myfinalpkg")
+
+```
