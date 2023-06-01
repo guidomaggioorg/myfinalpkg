@@ -40,7 +40,6 @@ last_n_days_rep(data)
 ### Installation
 
 ```r
-require(devtools)
-install_github("yourgithubrepo/myfinalpkg")
-
+require(remotes)
+remotes::install_github("guidomaggioorg/myfinalpkg")
 ```
