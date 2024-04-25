@@ -9,7 +9,7 @@ Install myfinalpkg from the github repo
 ```r
 require(remotes)
 # Installs the master branch of myfinalpkg
-remotes::install_github("yourgithubrepo/myfinalpkg")
+remotes::install_github("guidomaggioorg/myfinalpkg")
 ```
 
 ### Description
