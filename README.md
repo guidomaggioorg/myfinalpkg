@@ -2,6 +2,16 @@
   
 The goal of **myfinalpkg** is to illustrate building a package during the IntroR4 workshop.
 
+### Installation
+
+Install myfinalpkg from the github repo
+
+```r
+require(remotes)
+# Installs the master branch of myfinalpkg
+remotes::install_github("yourgithubrepo/myfinalpkg")
+```
+
 ### Description
 
 `myfinalpkg` stores a csv file with Covid19 data from a given country.
