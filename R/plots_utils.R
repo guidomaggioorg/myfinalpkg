@@ -85,6 +85,7 @@ get_date_breaks <- function(dates, threshold = 160) {
 #'
 #' @import dplyr
 #' @import ggplot2
+#' @importFrom plotly ggplotly
 #' @importFrom dplyr filter
 #' @export
 #'
@@ -97,14 +98,14 @@ get_date_breaks <- function(dates, threshold = 160) {
 line_plot_data <- function(data, value, startdate = data$Date[1], title) {
   if (!(value %in% names(data)))
     stop(value, " is not a valid column name of data")
-  
+
   if (!missing(startdate)) {
     # conflicts with "stats" package, ::: could be required
     data <- data %>%
       filter(Date >= startdate)
   }
   date.break <- get_date_breaks(data$Date)
-  
+
   p <- ggplot(data, aes(
     x = Date,
     y = !!sym(value),
@@ -119,7 +120,9 @@ line_plot_data <- function(data, value, startdate = data$Date[1], title) {
   #add title if present
   if (!missing(title))
     p <- p + labs(title = title)
-  p
+  pp <- p %>%
+    ggplotly(tooltip = c("x", "y"))
+  pp
 }
 
 #' Barplot function
@@ -136,6 +139,7 @@ line_plot_data <- function(data, value, startdate = data$Date[1], title) {
 #'
 #' @import dplyr
 #' @import ggplot2
+#' @importFrom plotly ggplotly
 #' @importFrom dplyr filter
 #' @export
 #'
@@ -148,21 +152,21 @@ line_plot_data <- function(data, value, startdate = data$Date[1], title) {
 bar_plot_data <- function(data, value, startdate = data$Date[1], rollm = FALSE, title) {
   if (!(value %in% names(data)))
     stop(value, " is not a valid column name of data")
-  
+
   if (!missing(startdate)) {
     # conflicts with "stats" package, ::: could be required
     data <- data %>%
       filter(Date >= startdate)
   }
   date.break <- get_date_breaks(data$Date)
-  
+
   p <- ggplot(data, aes(
     x = Date,
     y = !!sym(value),
     group = 1
   )) +
     geom_bar(stat = "identity", colour = .ColorBars)
-  
+
   if (rollm) {
     # use !sym() to parse rolled.value
     message("Add rolled mean for ", value)
@@ -175,10 +179,12 @@ bar_plot_data <- function(data, value, startdate = data$Date[1], rollm = FALSE, 
     theme_plot()
   # add scales
   p <- scale_axes(p, date.break)
-  
+
   #add title if present
   if (!missing(title))
     p <- p + labs(title = title)
-  p
+  pp <- p %>%
+    ggplotly(tooltip = c("x", "y"))
+  pp
 }
 
