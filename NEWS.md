@@ -1,3 +1,5 @@
+# myfinalpkg (development version)
+
 # myfinalpkg 1.1.0
 
 * Added News md file to track releases (#1).
